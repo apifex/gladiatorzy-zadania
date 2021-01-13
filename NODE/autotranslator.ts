@@ -36,6 +36,7 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 const {Translate} = require('@google-cloud/translate').v2
 
+let sourcelang = 'pl'
 
 const pl = {
   attention:{
@@ -53,6 +54,7 @@ const pl = {
 const PORT = 5000
 const PROJECT_ID = '##nameOfProject##'
 const API_KEY = '##keyfromgoogleapis##'
+const SOURCE_LANG = 'pl'
 
 const server = express();
 
@@ -101,9 +103,8 @@ const createNewLang = (translated: string[], langData: Object, langName: any) =>
         // @ts-ignore
         Object.entries(el[1]).forEach(elem=>{
           if (typeof elem[1] === "string") {
-            if (elem[1].includes('lang=pl')) {
-              let regex = /lang=pl/i
-              langName[el[0]][elem[0]] = langName[el[0]][elem[0]].replace(regex, `lang=${langString}`)
+            if (elem[1].includes(`lang=${SOURCE_LANG}`)) {
+              langName[el[0]][elem[0]] = langName[el[0]][elem[0]].replace(`lang=${SOURCE_LANG}`, `lang=${langString}`)
             } else {
               langName[el[0]][elem[0]] = translated.shift()
             }
